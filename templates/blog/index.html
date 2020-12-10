@@ -1,0 +1,114 @@
+{% extends 'base.html' %}
+
+
+{% block title %}
+    ICT Hub's Blog - Blogs Page
+{% endblock title%}
+
+{% block style %}
+    #fh5co-offcanvas .fh5co-menu {
+      float: left;
+    }
+{% endblock style %}
+
+{% block profile %}
+        {% if request.user.is_authenticated %}
+            <div style="text-align:center;">
+            <figure>
+            <img src="{{ auth.profile_pic.url }}" style="width:150px;height: 150px;" alt="profile pic" class="">
+			</figure>
+			<h3 class="heading" style="margin-bottom:-10px!important;">About Me</h3>
+			<h2 style="margin-bottom:-5px;">{{ auth.name.username }}</h2>
+            <small>{{ auth.email }}</small>
+			<p style="margin-top:10px;">{{ auth.details }} </p>
+            <a href="{% url 'update-profile' name=auth.name.username %}" class="btn btn-sm btn-danger mb-2">Edit</a>
+            </div>
+        {%endif%}
+
+{% endblock profile %}
+
+
+{% block dropdown %}
+                        <li role="presentation" class="dropdown">
+                        <a class="dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">
+                          All Categories <span class="caret"></span>
+                        </a>
+                        <ul class="dropdown-menu">
+                            {% for c in cat %}
+                                <li><a href="{% url 'category' name=c.name %}">{{ c.name }}</a></li>
+                            {% endfor %}
+                        </ul>
+                    </li>
+{% endblock dropdown %}
+
+
+{% block content %}
+
+            {% for p in post %}
+
+                <article class="col-lg-3 col-md-4 col-sm-6 col-xs-12 col-xxs-12 animate-box" style="margin-bottom:50px;!important">
+				<figure style="margin-bottom: 5px!important;">
+					<a href="{% url 'single-post' id=p.id %}"><img style="height:320px;width:250px;" src="{{ p.image.url }}" alt="Image"></a>
+				</figure>
+				<span style="margin-bottom: 5px!important;" class="fh5co-meta"><a href="{% url 'category' name=p.category.name %}">{{ p.category.name }}</a></span>
+				<h2 style="height:60px;font-size:18px!important;margin: 0px!important;" class=""><a style="height: 50px;" href="{% url 'single-post' id=p.id %}">{{ p.title }}</a></h2>
+                <h4><a href="{% url 'author' name=p.author_name.name.username %}">{{ p.author_name.name }}</a></h4>
+				<span style="margin: 0px!important;font-size:12px!important;" class="fh5co-meta fh5co-date">{{ p.posted_on|date:"M j, Y" }}</span>
+			</article>
+
+
+            {% endfor %}
+
+</div>
+    <div class="container-fluid text-center">
+        <div class="pagination">
+            <span class="step-links">
+                {% if post.has_previous %}
+                    <a href="?page=1">&laquo; first</a>
+                    <a href="?page={{ post.previous_page_number }}">previous</a>
+                {% endif %}
+
+                <span class="current">
+                    Page {{ post.number }} of {{ post.paginator.num_pages }}
+                </span>
+
+                {% if post.has_next %}
+                    <a href="?page={{ post.next_page_number }}">next</a>
+                    <a href="?page={{ post.paginator.num_pages }}">last &raquo;</a>
+                {% endif %}
+            </span>
+        </div>
+    </div>
+
+
+
+{% endblock content %}
+
+
+
+{% block search %}
+           <div class="fh5co-box">
+				<h3 class="heading">Search</h3>
+				<form action="" method="GET">
+                    {% csrf_token %}
+					<div class="form-group">
+                        <label>
+                            <input type="text" name="index_search" class="form-control" placeholder="Type a keyword" value="{{ request.GET.index_search }}">
+                        </label>
+                    </div>
+				</form>
+			</div>
+{% endblock search%}
+
+
+
+{% block scripts %}
+
+{% endblock scripts%}
+
+
+{% block footer %}
+        <footer id="fh5co-footer" style="padding: 15px 0px 8px 0px!important;">
+        <p><small>&copy; 2020 ICT Hub's Blog. All Rights Reserved </small></p>
+	    </footer>
+{% endblock footer %}

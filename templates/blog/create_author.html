@@ -1,0 +1,62 @@
+{% extends 'base.html' %}
+{% load crispy_forms_filters %}
+
+
+{% block title %}
+    ICT Hub's Blog - Author's Profile Page
+{% endblock title%}
+
+
+{% block style %}
+    #fh5co-offcanvas .fh5co-menu {
+      float: left;
+    }
+{% endblock style %}
+
+{% block profile %}
+
+{% endblock %}
+
+
+{% block scriptstag %}
+    <script>
+            function hide() {
+                const x = document.getElementById("hide_it");
+                if (x.style.display === "none") {
+                    x.style.display = "block";
+                  } else {
+                    x.style.display = "none";
+                  }
+                }
+    </script>
+{% endblock scriptstag %}
+
+
+
+{% block content %}
+    <div class="container">
+    <div class="row">
+        <div class="col-md-6 col-md-offset-3">
+            <h3 class="text-center">Author's Profile</h3>
+            <form action="" method="post" enctype="multipart/form-data">
+                {% csrf_token %}
+                {{ form|crispy }}
+                <div class="text-center">
+                    <a href="{% url 'index' %}" class="btn btn-danger">Cancel</a>
+                    <button type="submit" class="btn btn-success">Submit</button>
+                </div>
+
+            </form>
+        </div>
+    </div>
+    </div>
+{% endblock %}
+
+
+
+
+{% block footer %}
+        <footer id="fh5co-footer" style="padding: 15px 0px 8px 0px!important;">
+        <p><small>&copy; 2020 ICT Hub's Blog. All Rights Reserved </small></p>
+	    </footer>
+{% endblock footer %}

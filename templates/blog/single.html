@@ -1,0 +1,239 @@
+{% extends 'base.html' %}
+{% load crispy_forms_filters %}
+{% load social_share %}
+
+{% block title %}
+    ICT Hub's Blog - Single Blog Page
+{% endblock title%}
+
+{% block style %}
+    #fh5co-offcanvas .fh5co-menu {
+      float: left;
+    }
+    .newClass {
+        cursor: none;
+    }
+{% endblock style %}
+
+
+
+{% block profile %}
+
+        {% if request.user.is_authenticated %}
+            <div style="text-align:center;">
+            <figure>
+            <img src="{{ auth.profile_pic.url }}" style="width:150px;height: 150px;" alt="profile pic" class="">
+			</figure>
+			<h3 class="heading">About Me</h3>
+			<h2 style="margin-bottom:-5px;">{{ auth.name.username }}</h2>
+            <small>{{ auth.email }}</small>
+			<p style="margin-top:10px;">{{ auth.details }} </p>
+            </div>
+        {%endif%}
+
+{% endblock %}
+
+{% block dropdown %}
+                        <li role="presentation" class="dropdown">
+                        <a class="dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">
+                          All Categories <span class="caret"></span>
+                        </a>
+                        <ul class="dropdown-menu">
+                            {% for c in cat %}
+                                <li><a href="{% url 'category' name=c.name %}">{{ c.name }}</a></li>
+                            {% endfor %}
+                        </ul>
+                    </li>
+
+{% endblock dropdown %}
+
+
+{% block content %}
+
+        {% if post.id > first.id %}
+            <a href="{% url 'single-post' id=post.id|add:'-1'%}" class="fh5co-post-prev"><span><i class="icon-chevron-left"></i> Prev</span></a>
+        {% endif %}
+        {% if post.id < last.id %}
+            <a href="{% url 'single-post' id=post.id|add:'1'%}" class="fh5co-post-next"><span>Next <i class="icon-chevron-right"></i></span></a>
+        {% endif %}
+
+
+                <article class="col-lg-8 col-lg-offset-2 col-md-8 col-md-offset-2 col-sm-8 col-sm-offset-2 col-xs-12 col-xs-offset-0">
+				<figure class="animate-box">
+					<img src="{{ post.image.url }}" alt="Image" style="width: 50%;height: 500px;">
+				</figure>
+				<span class="fh5co-meta animate-box"><a href="{% url 'category' name=post.category.name %}">{{ post.category.name }}</a></span>
+				<h2 class="fh5co-article-title animate-box">{{ post.title }}</h2>
+				<span class="fh5co-meta fh5co-date animate-box">{{ post.posted_on|date:"M d, Y" }}</span>
+
+
+                                    <!-- Button trigger modal -->
+                <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModalCenter">
+                  About Blogger
+                </button>
+
+                <!-- Modal -->
+                <div class="modal fade" id="exampleModalCenter" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+                  <div class="modal-dialog modal-dialog-centered" role="document">
+                    <div class="modal-content">
+                      <div class="modal-header">
+                        <h5 class="modal-title" id="exampleModalLongTitle">Blogger Details</h5>
+                          <button style="margin-top:-15px;" type="button" class="close" data-dismiss="modal" aria-label="Close">
+                          <span aria-hidden="true" style="color:red;font-size:35px;margin-top:-5px;">&times;</span>
+                        </button>
+                      </div>
+
+                      <div class="modal-body">
+                        <figure>
+                        <img src="{{ post.author_name.profile_pic.url }}" alt="profile pic" style="height: 150px" class="text-center img-rounded">
+                        </figure>
+                        <h3 class="heading">About Me</h3>
+                        <h2 style="margin-bottom:-5px;"><a style="color:#F6BF5B!important;" href="{% url 'author' name=post.author_name.name.username %}">{{ post.author_name.name }}</a></h2>
+                        <small>{{ post.author_name.email }}</small>
+                        <p style="margin: 15px;" class="text-justify">{{ post.author_name.details }} </p>
+                      </div>
+
+                      <div class="modal-footer">
+                        <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+
+				<div class="col-lg-12 col-lg-offset-0 col-md-12 col-md-offset-0 col-sm-12 col-sm-offset-0 col-xs-12 col-xs-offset-0 text-left content-article">
+					<div class="row">
+						<div class="col-lg-12 cp-r animate-box">
+                            <p onclick="hide()" class="text-justify newClass">{{ post.body }}</p>
+                            <div class="row">
+                                <div class="col-md-12 text-center">
+                                    <div class="col-md-4">
+                                        <a>{% post_to_facebook object_or_url "Post to Facebook!" %}</a>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <a>{% post_to_twitter object_or_url "Post to Twitter" %}</a>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <a>{% post_to_gplus object_or_url "Post to Google+!" %}</a>
+                                    </div>
+
+
+                                </div>
+                            </div>
+
+
+
+
+
+                            <script>
+                            function hide(){
+                                const p = document.getElementsByClassName('newClass');
+                                p.classList.add("newClass");
+                            }
+                        </script>
+                        </div>
+
+
+
+
+{#						<div class="col-lg-4 animate-box">#}
+{#							<div class="fh5co-highlight right">#}
+{#								<h4>Highlight</h4>#}
+{#								<p>Separated they live in Bookmarksgrove right at the coast of the Semantics, a large language ocean. A small river named Duden flows by their place and supplies it with the necessary regelialia</p>#}
+{#							</div>#}
+{#						</div>#}
+					</div>
+
+
+                </div>
+
+			    </article>
+        </div>
+
+        <div class="container">
+                <h2 class="well">Related Articles</h2>
+                    <div class="row">
+
+                    {% for r in related %}
+                        <div class="col-md-4 col-sm-6 col-xs-12">
+                                <figure class="animate-box" >
+                                    <a href="{% url 'single-post' id=r.id %}"><img src="{{ r.image.url }}" alt="Image" style="width: 40%;height: 220px;"></a>
+                                    <a href="{% url 'single-post' id=r.id %}"><h3 style="height: 60px;" class="fh5co-article-title animate-box">{{ r.title }}</h3></a>
+                                    <p class="text-justify">{{ r.body|slice:"255" }}</p>
+                                </figure>
+                        </div>
+                    {% endfor %}
+                    </div>
+
+
+
+                <h3 class="well">Comments</h3>
+                <div class="media">
+                    <div class="media-body">
+                    {% for comment in comment %}
+                         <h4>{{ comment.name }}</h4>
+                         <h5>{{ comment.email }}</h5>
+                         <p style="background:#ffffe6;margin-bottom:25px;">{{ comment.post_comment }}</p>
+                    {% empty %}
+                        <h3 style="background:#ffffe6;margin-bottom:25px;">Sorry No Comments Found</h3>
+                    {% endfor %}
+                    </div>
+                </div>
+
+
+
+
+                {% if request.user.is_authenticated %}
+                    <div class="row">
+                        <div class="col-md-8 col-md-offset-2">
+                             <div class="panel panel-default">
+                                <div class="panel-heading">
+                                <h3 class="panel-title">Post Comment On This Article</h3>
+                                </div>
+                                 <div class="panel-body">
+                                    <form method="post">
+                                        {% csrf_token %}
+                                        {{ form|crispy }}
+                                        <button class="btn btn-primary">Comment</button>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                {% else %}
+                    <div class="row">
+                        <div class="col-md-8 col-md-offset-2">
+                             <div class="panel panel-default">
+                                <div class="panel-heading">
+                                <h3 class="panel-title">Post Comment On This Article</h3>
+                                </div>
+                                 <div class="panel-body">
+                                    <form method="post">
+                                        {% csrf_token %}
+                                        {{ form|crispy }}
+                                        <button class="btn btn-primary">Comment</button>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                {% endif %}
+
+
+
+
+        </div>
+
+
+{% endblock content%}
+
+{% block scripts %}
+
+{% endblock %}
+
+
+{% block footer %}
+        <footer id="fh5co-footer" style="padding: 15px 0px 8px 0px!important;">
+        <p><small>&copy; 2020 ICT Hub's Blog. All Rights Reserved </small></p>
+	    </footer>
+{% endblock footer %}

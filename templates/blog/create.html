@@ -1,0 +1,76 @@
+{% extends 'base.html' %}
+
+{% load crispy_forms_filters %}
+{% load crispy_forms_tags %}
+
+{% block title %}
+    ICT Hub's Blog - Post A Blog
+{% endblock title %}
+
+{% block style %}
+    #fh5co-offcanvas .fh5co-menu {
+      float: left;
+    }
+{% endblock style %}
+
+
+{% block profile %}
+        {% if request.user.is_authenticated %}
+            <div style="text-align:center;">
+            <figure>
+            <img src="{{ auth.profile_pic.url }}" style="width:150px;height: 150px;" alt="profile pic" class="">
+			</figure>
+			<h3 class="heading">About Me</h3>
+			<h2 style="margin-bottom:-5px;">{{ auth.name.username }}</h2>
+            <small>{{ auth.email }}</small>
+			<p style="margin-top:10px;">{{ auth.details }} </p>
+            </div>
+        {%endif%}
+{% endblock profile %}
+
+
+{% block dropdown %}
+                <li role="presentation" class="dropdown">
+                    <a class="dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">
+                          All Categories <span class="caret"></span>
+                    </a>
+                    <ul class="dropdown-menu">
+                        {% for c in cat %}
+                            <li><a href="{% url 'category' name=c.name %}">{{ c.name }}</a></li>
+                        {% endfor %}
+                    </ul>
+                </li>
+{% endblock dropdown %}
+
+
+
+{% block content %}
+        <div class="container">
+            <div class="row">
+                <div class="col-md-6 col-md-offset-3">
+                    <h3 class="text-center" style="margin-bottom:20px;">Create Post</h3>
+                    <form method="post" enctype="multipart/form-data">
+                        {% csrf_token %}
+                        <div class="form-group">
+                            {{ form|crispy }}
+                        </div>
+                         <button class="btn btn-default btn-block" style="margin-top:20px;font-size:20px;margin-bottom:40px;" type="submit">POST</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+{% endblock content%}
+
+
+
+{% block scripts %}
+
+{% endblock scripts%}
+
+
+{% block footer %}
+        <footer id="fh5co-footer" style="padding: 15px 0px 8px 0px!important;">
+        <p><small>&copy; 2020 ICT Hub's Blog. All Rights Reserved </small></p>
+	    </footer>
+{% endblock footer %}

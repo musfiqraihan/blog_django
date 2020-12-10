@@ -1,0 +1,84 @@
+{% extends 'base.html' %}
+
+
+{% block title %}
+    ICT Hub's Blog - {{ auth.name }}'s blogs
+{% endblock title%}
+
+{% block style %}
+    #fh5co-offcanvas .fh5co-menu {
+      float: left;
+    }
+{% endblock style %}
+
+{% block profile %}
+        {% if request.user.is_authenticated %}
+            <div style="text-align:center;">
+            <figure>
+            <img src="{{ auth.profile_pic.url }}" style="width:150px;height: 150px;" alt="profile pic" class="">
+			</figure>
+			<h3 class="heading">About Me</h3>
+			<h2 style="margin-bottom:-5px;">{{ auth.name.username }}</h2>
+            <small>{{ auth.email }}</small>
+			<p style="margin-top:10px;">{{ auth.details }} </p>
+            </div>
+        {%endif%}
+
+{% endblock profile %}
+
+
+{% block dropdown %}
+                        <li role="presentation" class="dropdown">
+                        <a class="dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">
+                          All Categories <span class="caret"></span>
+                        </a>
+                        <ul class="dropdown-menu">
+                            {% for c in cat %}
+                                <li><a href="{% url 'category' name=c.name %}">{{ c.name }}</a></li>
+                            {% endfor %}
+                        </ul>
+                    </li>
+{% endblock dropdown %}
+
+
+
+{% block content %}
+
+    <div class="container">
+        <div class="row">
+        <div class="col-md-10 col-sm-12 col-xs-12 col-md-offset-1">
+        <a href="{% url 'create-post' %}" class="btn btn-sm btn-success pull pull-right" style="margin-bottom:20px;">Add New Article</a>
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <td class="text-left">Title</td>
+                    <td class="text-right">Published</td>
+                    <td class="text-right">Action</td>
+                </tr>
+            </thead>
+            <tbody>
+                {% for p in post %}
+                <tr>
+                    <td class="text-left" style="vertical-align: middle;!important"><a href="{% url 'single-post' id=p.id %}">{{ p.title }}</a></td>
+                    <td class="text-right" style="vertical-align: middle;!important">{{ p.posted_on|date:"M d, Y" }}</td>
+                    <td class="text-right"><a class="btn btn-sm btn-info" href="{% url 'update-post' pid=p.id %}">Edit</a>  <a href="{% url 'delete-post' pid=p.id %}" class="btn btn-sm btn-danger" >Delete</a> </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+        </div>
+    </div>
+
+    </div>
+
+{% endblock content%}
+
+{% block scripts %}
+
+{% endblock %}
+
+{% block footer %}
+        <footer id="fh5co-footer" style="padding: 15px 0px 8px 0px!important;">
+        <p><small>&copy; 2020 ICT Hub's Blog. All Rights Reserved </small></p>
+	    </footer>
+{% endblock footer %}
