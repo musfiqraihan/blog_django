@@ -1,0 +1,1 @@
+web: gunicorn ICT_HUB_BLOG.wsgi --log-file -
